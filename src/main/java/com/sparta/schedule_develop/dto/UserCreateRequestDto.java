@@ -9,8 +9,11 @@ public class UserCreateRequestDto {
 
     private final String email;
 
-    public UserCreateRequestDto(String name, String email) {
+    private final String password;
+
+    public UserCreateRequestDto(String name, String email, String password) {
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 }

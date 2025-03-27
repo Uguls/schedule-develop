@@ -20,7 +20,7 @@ public class UserService {
     private final ScheduleRepository scheduleRepository;
 
     public UserResponseDto save(UserCreateRequestDto dto) {
-        User user = new User(dto.getEmail(), dto.getName());
+        User user = new User(dto.getEmail(), dto.getName(), dto.getPassword());
 
         User saved = userRepository.save(user);
 
@@ -41,7 +41,7 @@ public class UserService {
 
     @Transactional
     public UserResponseDto updateById(Long id, UserUpdateRequestDto dto) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다." + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + id));
 
         user.update(dto.getName(), dto.getEmail());
 
@@ -50,7 +50,7 @@ public class UserService {
 
     @Transactional
     public void deleteById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다." + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + id));
 
         scheduleRepository.deleteAllByUser_Id(id);
 
