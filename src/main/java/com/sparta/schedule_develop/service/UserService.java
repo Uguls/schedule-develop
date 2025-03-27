@@ -3,8 +3,9 @@ package com.sparta.schedule_develop.service;
 import com.sparta.schedule_develop.dto.LoginRequestDto;
 import com.sparta.schedule_develop.dto.User.UserCreateRequestDto;
 import com.sparta.schedule_develop.dto.User.UserResponseDto;
-import com.sparta.schedule_develop.dto.User.UserUpdateRequestDto;
+import com.sparta.schedule_develop.dto.User.UserUpdateAndDeleteRequestDto;
 import com.sparta.schedule_develop.entity.User;
+import com.sparta.schedule_develop.exception.PasswordMismatchException;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
 import com.sparta.schedule_develop.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,8 +43,12 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto updateById(Long id, UserUpdateRequestDto dto) {
+    public UserResponseDto updateById(Long id, UserUpdateAndDeleteRequestDto dto) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + id));
+
+        if (!user.getPassword().equals(dto.getPassword())) {
+            throw  new PasswordMismatchException();
+        }
 
         user.update(dto.getName(), dto.getEmail());
 
@@ -51,16 +56,16 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + id));
+    public void deleteById(UserUpdateAndDeleteRequestDto dto) {
+        User user = userRepository.findByEmailAndName(dto.getEmail(), dto.getName()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + dto.getName()));
 
-        scheduleRepository.deleteAllByUser_Id(id);
+        scheduleRepository.deleteAllByUser_Id(user.getId());
 
         userRepository.delete(user);
     }
 
     public void login(LoginRequestDto dto, HttpServletRequest request) {
-        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + dto.getEmail()));
+        User user = userRepository.findByEmailAndName(dto.getEmail(), dto.getName()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + dto.getEmail()));
 
         if (!user.getPassword().equals(dto.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");

@@ -5,6 +5,7 @@ import com.sparta.schedule_develop.dto.Schedule.ScheduleCreateRequestDto;
 import com.sparta.schedule_develop.dto.Schedule.ScheduleResponseDto;
 import com.sparta.schedule_develop.dto.Schedule.ScheduleUpdateRequestDto;
 import com.sparta.schedule_develop.service.ScheduleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping("/")
-    public ResponseEntity<ScheduleResponseDto> saveSchedule(@RequestBody ScheduleCreateRequestDto dto) {
+    public ResponseEntity<ScheduleResponseDto> saveSchedule(@Valid @RequestBody ScheduleCreateRequestDto dto) {
         ScheduleResponseDto save = scheduleService.save(dto);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
@@ -40,7 +41,7 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateScheduleById(
             @PathVariable Long id,
-            @RequestBody ScheduleUpdateRequestDto dto
+            @Valid @RequestBody ScheduleUpdateRequestDto dto
     ) {
         ScheduleResponseDto updated = scheduleService.updateById(id, dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);

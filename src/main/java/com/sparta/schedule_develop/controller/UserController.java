@@ -3,9 +3,10 @@ package com.sparta.schedule_develop.controller;
 import com.sparta.schedule_develop.dto.LoginRequestDto;
 import com.sparta.schedule_develop.dto.User.UserCreateRequestDto;
 import com.sparta.schedule_develop.dto.User.UserResponseDto;
-import com.sparta.schedule_develop.dto.User.UserUpdateRequestDto;
+import com.sparta.schedule_develop.dto.User.UserUpdateAndDeleteRequestDto;
 import com.sparta.schedule_develop.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> save(@RequestBody UserCreateRequestDto dto) {
+    public ResponseEntity<UserResponseDto> save(@Valid @RequestBody UserCreateRequestDto dto) {
         UserResponseDto saved = userService.save(dto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody LoginRequestDto dto, HttpServletRequest request) {
+    public ResponseEntity<UserResponseDto> login(@Valid @RequestBody LoginRequestDto dto, HttpServletRequest request) {
         userService.login(dto, request);
         return null;
     }
@@ -47,15 +48,15 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUserById(
             @PathVariable Long id,
-            @RequestBody UserUpdateRequestDto dto
+            @Valid @RequestBody UserUpdateAndDeleteRequestDto dto
     ) {
         UserResponseDto updated = userService.updateById(id, dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
-        userService.deleteById(id);
-        return new ResponseEntity<>( id + " 유저 삭제 성공", HttpStatus.OK);
+    @DeleteMapping("/")
+    public ResponseEntity<String> deleteUserById(@Valid @RequestBody UserUpdateAndDeleteRequestDto dto) {
+        userService.deleteById(dto);
+        return new ResponseEntity<>( dto.getName() + " 유저 삭제 성공", HttpStatus.OK);
     }
 }
