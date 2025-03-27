@@ -2,12 +2,12 @@ package com.sparta.schedule_develop.service;
 
 import com.sparta.schedule_develop.dto.ScheduleCreateRequestDto;
 import com.sparta.schedule_develop.dto.ScheduleResponseDto;
+import com.sparta.schedule_develop.dto.ScheduleUpdateRequestDto;
 import com.sparta.schedule_develop.entity.Schedule;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,7 +31,17 @@ public class ScheduleService {
     }
 
     public ScheduleResponseDto findById(Long id) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+        return new ScheduleResponseDto(schedule);
+    }
+
+    @Transactional
+    public ScheduleResponseDto updateByid(Long id, ScheduleUpdateRequestDto dto) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+
+        schedule.update(dto.getTitle(), dto.getContent());
+
+
         return new ScheduleResponseDto(schedule);
     }
 }

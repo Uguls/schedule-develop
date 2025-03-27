@@ -3,6 +3,7 @@ package com.sparta.schedule_develop.controller;
 
 import com.sparta.schedule_develop.dto.ScheduleCreateRequestDto;
 import com.sparta.schedule_develop.dto.ScheduleResponseDto;
+import com.sparta.schedule_develop.dto.ScheduleUpdateRequestDto;
 import com.sparta.schedule_develop.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,4 +36,17 @@ public class ScheduleController {
         ScheduleResponseDto schedule = scheduleService.findById(id);
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateScheduleById(
+            @PathVariable Long id,
+            @RequestBody ScheduleUpdateRequestDto dto
+    ) {
+        ScheduleResponseDto updated = scheduleService.updateByid(id, dto);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+
+
+
 }
