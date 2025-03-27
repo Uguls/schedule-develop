@@ -42,14 +42,14 @@ public class ScheduleController {
             @PathVariable Long id,
             @RequestBody ScheduleUpdateRequestDto dto
     ) {
-        ScheduleResponseDto updated = scheduleService.updateByid(id, dto);
+        ScheduleResponseDto updated = scheduleService.updateById(id, dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteScheduleById(@PathVariable Long id) {
-        scheduleService.deleteByid(id);
-        return new ResponseEntity<>("할일 삭제 성공", HttpStatus.OK);
+        scheduleService.deleteById(id);
+        return new ResponseEntity<>("일정 삭제 성공", HttpStatus.OK);
     }
 
 }
