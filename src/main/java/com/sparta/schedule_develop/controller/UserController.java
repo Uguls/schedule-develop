@@ -1,9 +1,9 @@
 package com.sparta.schedule_develop.controller;
 
 import com.sparta.schedule_develop.dto.LoginRequestDto;
-import com.sparta.schedule_develop.dto.UserCreateRequestDto;
-import com.sparta.schedule_develop.dto.UserResponseDto;
-import com.sparta.schedule_develop.dto.UserUpdateRequestDto;
+import com.sparta.schedule_develop.dto.User.UserCreateRequestDto;
+import com.sparta.schedule_develop.dto.User.UserResponseDto;
+import com.sparta.schedule_develop.dto.User.UserUpdateRequestDto;
 import com.sparta.schedule_develop.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
