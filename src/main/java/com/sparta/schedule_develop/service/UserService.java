@@ -1,11 +1,13 @@
 package com.sparta.schedule_develop.service;
 
+import com.sparta.schedule_develop.dto.LoginRequestDto;
 import com.sparta.schedule_develop.dto.UserCreateRequestDto;
 import com.sparta.schedule_develop.dto.UserResponseDto;
 import com.sparta.schedule_develop.dto.UserUpdateRequestDto;
 import com.sparta.schedule_develop.entity.User;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
 import com.sparta.schedule_develop.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,5 +57,16 @@ public class UserService {
         scheduleRepository.deleteAllByUser_Id(id);
 
         userRepository.delete(user);
+    }
+
+    public void login(LoginRequestDto dto, HttpServletRequest request) {
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + dto.getEmail()));
+
+        if (!user.getPassword().equals(dto.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        request.getSession(true).setAttribute("user", user);
+
     }
 }
