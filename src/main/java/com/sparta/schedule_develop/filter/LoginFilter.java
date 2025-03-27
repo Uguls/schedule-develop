@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.PatternMatchUtils;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Slf4j
 public class LoginFilter implements Filter {
@@ -16,18 +17,36 @@ public class LoginFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String requestURI = httpRequest.getRequestURI();
 
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        String requestURI = httpRequest.getRequestURI();
 
         if (!isWhiteList(requestURI)) {
             HttpSession session = httpRequest.getSession(false);
             if (session == null || session.getAttribute("user") == null) {
-                throw new RuntimeException("로그인 필요");
+
+                // 직접 JSON 응답 작성
+                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                httpResponse.setContentType("application/json");
+                httpResponse.setCharacterEncoding("UTF-8");
+
+                String json = """
+                    {
+                      "timestamp": "%s",
+                      "status": 401,
+                      "error": "UNAUTHORIZED",
+                      "code": "401",
+                      "message": "로그인이 필요합니다.",
+                      "path": "%s"
+                    }
+                    """.formatted(LocalDateTime.now(), requestURI);
+
+                httpResponse.getWriter().write(json);
+                return;
             }
-            log.info("로그인에 성공했습니다");
         }
+
         chain.doFilter(request, response);
     }
 
