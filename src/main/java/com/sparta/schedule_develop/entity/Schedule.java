@@ -11,7 +11,7 @@ public class Schedule extends BaseEntity{
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String user_name;
 
     @Column(nullable = false)
     private String title;
