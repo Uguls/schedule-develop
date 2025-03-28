@@ -1,9 +1,9 @@
 package com.sparta.schedule_develop.controller;
 
 import com.sparta.schedule_develop.dto.LoginRequestDto;
-import com.sparta.schedule_develop.dto.User.UserCreateRequestDto;
-import com.sparta.schedule_develop.dto.User.UserResponseDto;
-import com.sparta.schedule_develop.dto.User.UserUpdateAndDeleteRequestDto;
+import com.sparta.schedule_develop.dto.user.UserCreateRequestDto;
+import com.sparta.schedule_develop.dto.user.UserResponseDto;
+import com.sparta.schedule_develop.dto.user.UserUpdateAndDeleteRequestDto;
 import com.sparta.schedule_develop.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

@@ -1,11 +1,12 @@
 package com.sparta.schedule_develop.service;
 
 import com.sparta.schedule_develop.dto.LoginRequestDto;
-import com.sparta.schedule_develop.dto.User.UserCreateRequestDto;
-import com.sparta.schedule_develop.dto.User.UserResponseDto;
-import com.sparta.schedule_develop.dto.User.UserUpdateAndDeleteRequestDto;
+import com.sparta.schedule_develop.dto.user.UserCreateRequestDto;
+import com.sparta.schedule_develop.dto.user.UserResponseDto;
+import com.sparta.schedule_develop.dto.user.UserUpdateAndDeleteRequestDto;
 import com.sparta.schedule_develop.entity.User;
 import com.sparta.schedule_develop.exception.PasswordMismatchException;
+import com.sparta.schedule_develop.repository.CommentRepository;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
 import com.sparta.schedule_develop.repository.UserRepository;
 import com.sparta.schedule_develop.util.PasswordUtil;
@@ -22,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
 
     public UserResponseDto save(UserCreateRequestDto dto) {
 
@@ -64,6 +66,7 @@ public class UserService {
         User user = userRepository.findByEmailAndName(dto.getEmail(), dto.getName()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + dto.getName()));
 
         scheduleRepository.deleteAllByUser_Id(user.getId());
+        commentRepository.deleteAllByUser_Id(user.getId());
 
         userRepository.delete(user);
     }

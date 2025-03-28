@@ -1,10 +1,11 @@
 package com.sparta.schedule_develop.service;
 
-import com.sparta.schedule_develop.dto.Schedule.ScheduleCreateRequestDto;
-import com.sparta.schedule_develop.dto.Schedule.ScheduleResponseDto;
-import com.sparta.schedule_develop.dto.Schedule.ScheduleUpdateRequestDto;
+import com.sparta.schedule_develop.dto.schedule.ScheduleCreateRequestDto;
+import com.sparta.schedule_develop.dto.schedule.ScheduleResponseDto;
+import com.sparta.schedule_develop.dto.schedule.ScheduleUpdateRequestDto;
 import com.sparta.schedule_develop.entity.Schedule;
 import com.sparta.schedule_develop.entity.User;
+import com.sparta.schedule_develop.repository.CommentRepository;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
 import com.sparta.schedule_develop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     public ScheduleResponseDto save(ScheduleCreateRequestDto dto) {
         User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
@@ -55,6 +57,8 @@ public class ScheduleService {
     @Transactional
     public void deleteById(Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다." + id));
+
+        commentRepository.deleteAllBySchedule_Id(id);
 
         scheduleRepository.delete(schedule);
 

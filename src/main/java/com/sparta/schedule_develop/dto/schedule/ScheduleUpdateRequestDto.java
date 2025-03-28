@@ -1,4 +1,4 @@
-package com.sparta.schedule_develop.dto.Schedule;
+package com.sparta.schedule_develop.dto.schedule;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

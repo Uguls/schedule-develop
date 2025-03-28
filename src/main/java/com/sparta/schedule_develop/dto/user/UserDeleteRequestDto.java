@@ -1,4 +1,4 @@
-package com.sparta.schedule_develop.dto.User;
+package com.sparta.schedule_develop.dto.user;
 
 import lombok.Getter;
 
