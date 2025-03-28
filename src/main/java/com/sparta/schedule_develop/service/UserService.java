@@ -8,6 +8,7 @@ import com.sparta.schedule_develop.entity.User;
 import com.sparta.schedule_develop.exception.PasswordMismatchException;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
 import com.sparta.schedule_develop.repository.UserRepository;
+import com.sparta.schedule_develop.util.PasswordUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,10 @@ public class UserService {
     private final ScheduleRepository scheduleRepository;
 
     public UserResponseDto save(UserCreateRequestDto dto) {
-        User user = new User(dto.getEmail(), dto.getName(), dto.getPassword());
+
+        String encodedPw = PasswordUtil.encode(dto.getPassword());
+
+        User user = new User(dto.getEmail(), dto.getName(), encodedPw);
 
         User saved = userRepository.save(user);
 
@@ -67,7 +71,7 @@ public class UserService {
     public void login(LoginRequestDto dto, HttpServletRequest request) {
         User user = userRepository.findByEmailAndName(dto.getEmail(), dto.getName()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + dto.getEmail()));
 
-        if (!user.getPassword().equals(dto.getPassword())) {
+        if (!PasswordUtil.matches(dto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
