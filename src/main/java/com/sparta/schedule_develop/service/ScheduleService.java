@@ -53,7 +53,6 @@ public class ScheduleService {
         }
 
         return list;
-
     }
 
 

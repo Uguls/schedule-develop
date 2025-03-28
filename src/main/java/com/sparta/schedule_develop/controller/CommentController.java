@@ -20,24 +20,41 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    /**
+     * @param dto 댓글 내용(content)
+     * @return 댓글 작성 성공 시
+     * 내용, 작성자명, 일정 이름, 작성날짜, 수정날짜
+     */
     @PostMapping("/")
     public ResponseEntity<CommentResponseDto> saveSchedule(@Valid @RequestBody CommentCreateRequestDto dto) {
         CommentResponseDto save = commentService.save(dto);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
 
+    /**
+     * @return 전체 댓글 목록 출력
+     */
     @GetMapping("/")
     public ResponseEntity<List<CommentResponseDto>> findAllSchedule() {
         List<CommentResponseDto> all = commentService.findAll();
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
+    /**
+     * @param id 댓글이 작성된 일정 id
+     * @return 내용, 작성자명, 일정 이름, 작성날짜, 수정날짜
+     */
     @GetMapping("/{id}")
     public ResponseEntity<CommentResponseDto> findScheduleById(@PathVariable Long id) {
         CommentResponseDto schedule = commentService.findById(id);
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
 
+    /**
+     * @param id 수정할 댓글 id
+     * @param dto 수정할 댓글 내용
+     * @return 수정된 댓글 내용, 작성자명, 일정 이름, 작성날짜, 수정날짜
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<CommentResponseDto> updateScheduleById(
             @PathVariable Long id,
@@ -47,6 +64,10 @@ public class CommentController {
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
+    /**
+     * @param id 삭제할 댓글 id
+     * @return 댓글 삭제 성공 여부
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteScheduleById(@PathVariable Long id) {
         commentService.deleteById(id);
