@@ -1,5 +1,6 @@
 package com.sparta.schedule_develop.service;
 
+import com.sparta.schedule_develop.dto.ScheduleWithCommentResponseDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleCreateRequestDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleResponseDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleUpdateRequestDto;
@@ -9,9 +10,12 @@ import com.sparta.schedule_develop.repository.CommentRepository;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
 import com.sparta.schedule_develop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,6 +43,20 @@ public class ScheduleService {
                 .toList();
     }
 
+    public List<ScheduleWithCommentResponseDto> findAllWithCommentCount(Pageable pageable) {
+        Page<Schedule> schedules = scheduleRepository.findAll(pageable);
+        List<ScheduleWithCommentResponseDto> list = new ArrayList<>();
+
+        for (Schedule schedule : schedules.getContent()) {
+            long count = commentRepository.countByScheduleId(schedule.getId());
+            list.add(ScheduleWithCommentResponseDto.withCommentCount(schedule, count));
+        }
+
+        return list;
+
+    }
+
+
     public ScheduleResponseDto findById(Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다." + id));
         return new ScheduleResponseDto(schedule);
@@ -63,4 +81,6 @@ public class ScheduleService {
         scheduleRepository.delete(schedule);
 
     }
+
+
 }

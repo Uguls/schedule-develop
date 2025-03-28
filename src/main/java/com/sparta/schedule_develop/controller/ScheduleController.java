@@ -1,12 +1,16 @@
 package com.sparta.schedule_develop.controller;
 
 
+import com.sparta.schedule_develop.dto.ScheduleWithCommentResponseDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleCreateRequestDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleResponseDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleUpdateRequestDto;
 import com.sparta.schedule_develop.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +31,13 @@ public class ScheduleController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedule() {
-        List<ScheduleResponseDto> all = scheduleService.findAll();
+    public ResponseEntity<List<ScheduleWithCommentResponseDto>> findAllSchedule(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
+//        List<ScheduleResponseDto> all = scheduleService.findAll();
+        List<ScheduleWithCommentResponseDto> all = scheduleService.findAllWithCommentCount(pageable);
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
