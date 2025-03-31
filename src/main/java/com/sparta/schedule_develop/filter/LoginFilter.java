@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class LoginFilter implements Filter {
 
-    private static final String[] WHITE_LIST = {"/users/signup", "/users/login"};
+    private static final String[] WHITE_LIST = {"/users/signup", "/users/login", "/swagger-ui/*"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -32,15 +32,15 @@ public class LoginFilter implements Filter {
                 httpResponse.setCharacterEncoding("UTF-8");
 
                 String json = """
-                    {
-                      "timestamp": "%s",
-                      "status": 401,
-                      "error": "UNAUTHORIZED",
-                      "code": "401",
-                      "message": "로그인이 필요합니다.",
-                      "path": "%s"
-                    }
-                    """.formatted(LocalDateTime.now(), requestURI);
+                        {
+                          "timestamp": "%s",
+                          "status": 401,
+                          "error": "UNAUTHORIZED",
+                          "code": "401",
+                          "message": "로그인이 필요합니다.",
+                          "path": "%s"
+                        }
+                        """.formatted(LocalDateTime.now(), requestURI);
 
                 httpResponse.getWriter().write(json);
                 return;

@@ -51,7 +51,7 @@ public class CommentController {
     }
 
     /**
-     * @param id 수정할 댓글 id
+     * @param id  수정할 댓글 id
      * @param dto 수정할 댓글 내용
      * @return 수정된 댓글 내용, 작성자명, 일정 이름, 작성날짜, 수정날짜
      */

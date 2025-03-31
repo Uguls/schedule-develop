@@ -61,7 +61,7 @@ public class ScheduleController {
     }
 
     /**
-     * @param id 수정할 일정 id
+     * @param id  수정할 일정 id
      * @param dto 일정 제목, 내용
      * @return 수정된 제목, 내용, 작성자명, 생성날짜, 수정날짜
      */

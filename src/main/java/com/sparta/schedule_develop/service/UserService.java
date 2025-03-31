@@ -53,7 +53,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + id));
 
         if (!user.getPassword().equals(dto.getPassword())) {
-            throw  new PasswordMismatchException();
+            throw new PasswordMismatchException();
         }
 
         user.update(dto.getName(), dto.getEmail());
@@ -65,13 +65,12 @@ public class UserService {
     public void deleteById(UserUpdateAndDeleteRequestDto dto) {
         User user = userRepository.findByEmailAndName(dto.getEmail(), dto.getName()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + dto.getName()));
 
-        scheduleRepository.deleteAllByUser_Id(user.getId());
         commentRepository.deleteAllByUser_Id(user.getId());
-
+        scheduleRepository.deleteAllByUser_Id(user.getId());
         userRepository.delete(user);
     }
 
-    public void login(LoginRequestDto dto, HttpServletRequest request) {
+    public UserResponseDto login(LoginRequestDto dto, HttpServletRequest request) {
         User user = userRepository.findByEmailAndName(dto.getEmail(), dto.getName()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다." + dto.getEmail()));
 
         if (!PasswordUtil.matches(dto.getPassword(), user.getPassword())) {
@@ -80,5 +79,6 @@ public class UserService {
 
         request.getSession(true).setAttribute("user", user);
 
+        return new UserResponseDto(user);
     }
 }

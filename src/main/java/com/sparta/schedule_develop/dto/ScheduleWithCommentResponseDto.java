@@ -7,13 +7,24 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ScheduleWithCommentResponseDto {
-    private Long id;
-    private String title;
-    private String description;
-    private String username;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-    private long commentCount;
+    private final Long id;
+    private final String title;
+    private final String description;
+    private final String username;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime modifiedAt;
+    private final long commentCount;
+
+    public ScheduleWithCommentResponseDto(Long id, String title, String description, String username,
+                                          LocalDateTime createdAt, LocalDateTime modifiedAt, long commentCount) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.username = username;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.commentCount = commentCount;
+    }
 
     public static ScheduleWithCommentResponseDto withCommentCount(Schedule s, long commentCount) {
         return new ScheduleWithCommentResponseDto(
@@ -25,16 +36,5 @@ public class ScheduleWithCommentResponseDto {
                 s.getUpdatedAt(),
                 commentCount
         );
-    }
-
-    public ScheduleWithCommentResponseDto(Long id, String title, String description, String username,
-                               LocalDateTime createdAt, LocalDateTime modifiedAt, long commentCount) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.username = username;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.commentCount = commentCount;
     }
 }

@@ -37,9 +37,8 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto> login(@Valid @RequestBody LoginRequestDto dto, HttpServletRequest request) {
-        userService.login(dto, request);
-        //TODO - 반환 작성
-        return null;
+        UserResponseDto logined = userService.login(dto, request);
+        return new ResponseEntity<>(logined, HttpStatus.OK);
     }
 
     /**
@@ -62,7 +61,7 @@ public class UserController {
     }
 
     /**
-     * @param id 수정할 유저 id
+     * @param id  수정할 유저 id
      * @param dto 수정할 유저의 이름, 이메일, 비밀번호
      * @return 이름, 이메일, 작성자 id, 생성날짜, 수정날짜
      */
@@ -82,6 +81,6 @@ public class UserController {
     @DeleteMapping("/")
     public ResponseEntity<String> deleteUserById(@Valid @RequestBody UserUpdateAndDeleteRequestDto dto) {
         userService.deleteById(dto);
-        return new ResponseEntity<>( dto.getName() + " 유저 삭제 성공", HttpStatus.OK);
+        return new ResponseEntity<>(dto.getName() + " 유저 삭제 성공", HttpStatus.OK);
     }
 }
