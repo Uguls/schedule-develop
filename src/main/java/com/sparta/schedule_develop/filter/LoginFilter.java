@@ -13,7 +13,16 @@ import java.time.LocalDateTime;
 @Slf4j
 public class LoginFilter implements Filter {
 
-    private static final String[] WHITE_LIST = {"/users/signup", "/users/login", "/swagger-ui/*"};
+    private static final String[] WHITE_LIST = {
+            "/users/signup",
+            "/users/login",
+            "/swagger-ui/*",
+            "/v3/api-docs",
+            "/v3/api-docs/*",
+            "/swagger-resources",
+            "/swagger-resources/*",
+            "/webjars/*"
+    };
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
