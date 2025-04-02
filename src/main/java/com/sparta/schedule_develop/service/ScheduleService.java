@@ -26,8 +26,8 @@ public class ScheduleService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
-    public ScheduleResponseDto save(ScheduleCreateRequestDto dto) {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+    public ScheduleResponseDto save(ScheduleCreateRequestDto dto, User loginUser) {
+        User user = userRepository.findById(loginUser.getId()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
         Schedule schedule = new Schedule(user, dto.getTitle(), dto.getContent());
 
@@ -62,18 +62,25 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateById(Long id, ScheduleUpdateRequestDto dto) {
+    public ScheduleResponseDto updateById(Long id, ScheduleUpdateRequestDto dto, User loginUser) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다." + id));
 
-        schedule.update(dto.getTitle(), dto.getContent());
+        if (!schedule.getUser().getId().equals(loginUser.getId())) {
+            throw new IllegalStateException("일정을 수정할 권한이 없습니다.");
+        }
 
+        schedule.update(dto.getTitle(), dto.getContent());
 
         return new ScheduleResponseDto(schedule);
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(Long id, User loginUser) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다." + id));
+
+        if (!schedule.getUser().getId().equals(loginUser.getId())) {
+            throw new IllegalStateException("일정을 삭제할 권한이 없습니다.");
+        }
 
         commentRepository.deleteAllBySchedule_Id(id);
 

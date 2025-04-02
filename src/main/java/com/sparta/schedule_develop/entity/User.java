@@ -3,9 +3,11 @@ package com.sparta.schedule_develop.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "user")
 public class User extends BaseEntity {
 
@@ -21,9 +23,6 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String password;
-
-    public User() {
-    }
 
     public User(String email, String name, String password) {
         this.email = email;

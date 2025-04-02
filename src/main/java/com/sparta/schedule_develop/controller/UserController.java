@@ -4,8 +4,10 @@ import com.sparta.schedule_develop.dto.LoginRequestDto;
 import com.sparta.schedule_develop.dto.user.UserCreateRequestDto;
 import com.sparta.schedule_develop.dto.user.UserResponseDto;
 import com.sparta.schedule_develop.dto.user.UserUpdateAndDeleteRequestDto;
+import com.sparta.schedule_develop.entity.User;
 import com.sparta.schedule_develop.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -68,9 +70,11 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUserById(
             @PathVariable Long id,
-            @Valid @RequestBody UserUpdateAndDeleteRequestDto dto
+            @Valid @RequestBody UserUpdateAndDeleteRequestDto dto,
+            HttpServletRequest request
     ) {
-        UserResponseDto updated = userService.updateById(id, dto);
+        User loginUser = (User) request.getSession(false).getAttribute("user");
+        UserResponseDto updated = userService.updateById(id, dto, loginUser);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
@@ -79,8 +83,19 @@ public class UserController {
      * @return 유저 삭제 성공 여부
      */
     @DeleteMapping("/")
-    public ResponseEntity<String> deleteUserById(@Valid @RequestBody UserUpdateAndDeleteRequestDto dto) {
-        userService.deleteById(dto);
-        return new ResponseEntity<>(dto.getName() + " 유저 삭제 성공", HttpStatus.OK);
+    public ResponseEntity<String> deleteUserById(HttpServletRequest request) {
+        User loginUser = (User) request.getSession(false).getAttribute("user");
+        userService.deleteById(loginUser);
+        return new ResponseEntity<>(loginUser.getName() + " 유저 삭제 성공", HttpStatus.OK);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return ResponseEntity.ok("로그아웃 완료");
+    }
+
 }

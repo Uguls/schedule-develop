@@ -2,9 +2,11 @@ package com.sparta.schedule_develop.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "comment")
 public class Comment extends BaseEntity {
     @Id
@@ -21,9 +23,6 @@ public class Comment extends BaseEntity {
 
     @Column(nullable = false)
     private String content;
-
-    public Comment() {
-    }
 
     public Comment(Schedule schedule, User user, String content) {
         this.schedule = schedule;

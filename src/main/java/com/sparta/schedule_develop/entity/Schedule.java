@@ -2,9 +2,11 @@ package com.sparta.schedule_develop.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "schedule")
 public class Schedule extends BaseEntity {
 
@@ -21,9 +23,6 @@ public class Schedule extends BaseEntity {
 
     @Column(nullable = false)
     private String content;
-
-    public Schedule() {
-    }
 
     public Schedule(User user, String title, String content) {
         this.user = user;

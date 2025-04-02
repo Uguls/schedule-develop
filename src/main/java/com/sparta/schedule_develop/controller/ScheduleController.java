@@ -5,7 +5,9 @@ import com.sparta.schedule_develop.dto.ScheduleWithCommentResponseDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleCreateRequestDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleResponseDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleUpdateRequestDto;
+import com.sparta.schedule_develop.entity.User;
 import com.sparta.schedule_develop.service.ScheduleService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -29,8 +31,10 @@ public class ScheduleController {
      * @return 제목, 내용, 작성자명, 생성날짜, 수정날짜
      */
     @PostMapping("/")
-    public ResponseEntity<ScheduleResponseDto> saveSchedule(@Valid @RequestBody ScheduleCreateRequestDto dto) {
-        ScheduleResponseDto save = scheduleService.save(dto);
+    public ResponseEntity<ScheduleResponseDto> saveSchedule(@Valid @RequestBody ScheduleCreateRequestDto dto, HttpServletRequest request
+    ) {
+        User loginUser = (User) request.getSession(false).getAttribute("user");
+        ScheduleResponseDto save = scheduleService.save(dto, loginUser);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
 
@@ -68,9 +72,11 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateScheduleById(
             @PathVariable Long id,
-            @Valid @RequestBody ScheduleUpdateRequestDto dto
+            @Valid @RequestBody ScheduleUpdateRequestDto dto,
+            HttpServletRequest request
     ) {
-        ScheduleResponseDto updated = scheduleService.updateById(id, dto);
+        User loginUser = (User) request.getSession(false).getAttribute("user");
+        ScheduleResponseDto updated = scheduleService.updateById(id, dto, loginUser);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
@@ -79,8 +85,9 @@ public class ScheduleController {
      * @return 일정 삭제 성공 여부
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteScheduleById(@PathVariable Long id) {
-        scheduleService.deleteById(id);
+    public ResponseEntity<String> deleteScheduleById(@PathVariable Long id, HttpServletRequest request) {
+        User loginUser = (User) request.getSession(false).getAttribute("user");
+        scheduleService.deleteById(id, loginUser);
         return new ResponseEntity<>("일정 삭제 성공", HttpStatus.OK);
     }
 

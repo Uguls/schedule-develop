@@ -6,9 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class ScheduleCreateRequestDto {
-
-    private final Long userId;
-
     @NotBlank(message = "할일 제목은 필수입니다.")
     @Size(max = 200, message = "할일 제목은 200자 이내여야 합니다.")
     private final String title;
@@ -18,7 +15,6 @@ public class ScheduleCreateRequestDto {
     private final String content;
 
     public ScheduleCreateRequestDto(Long userId, String title, String content) {
-        this.userId = userId;
         this.title = title;
         this.content = content;
     }
