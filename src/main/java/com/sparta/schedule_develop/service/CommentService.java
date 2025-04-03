@@ -27,7 +27,7 @@ public class CommentService {
 
         User user = userRepository.findById(loginUser.getId()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
-        Schedule schedule = scheduleRepository.findById(dto.getSchedulId()).orElseThrow(() -> new IllegalArgumentException("해당 할일이 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(dto.getScheduleId()).orElseThrow(() -> new IllegalArgumentException("해당 할일이 존재하지 않습니다."));
 
         Comment comment = new Comment(schedule, user, dto.getContent());
 

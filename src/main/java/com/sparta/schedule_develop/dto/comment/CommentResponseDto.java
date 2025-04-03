@@ -1,12 +1,14 @@
 package com.sparta.schedule_develop.dto.comment;
 
 import com.sparta.schedule_develop.entity.Comment;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
+@Builder
+@AllArgsConstructor
 public class CommentResponseDto {
     private final String content;
     private final String user_name;

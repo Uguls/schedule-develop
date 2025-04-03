@@ -7,14 +7,9 @@ import lombok.Getter;
 @Getter
 public class CommentCreateRequestDto {
 
-    private final Long schedulId;
+    private Long scheduleId;
 
     @NotBlank(message = "댓글 내용은 필수입니다.")
     @Size(max = 200, message = "댓글 내용은 200자 이내여야 합니다.")
-    private final String content;
-
-    public CommentCreateRequestDto(Long schedulId, Long userId, String content) {
-        this.schedulId = schedulId;
-        this.content = content;
-    }
+    private String content;
 }
