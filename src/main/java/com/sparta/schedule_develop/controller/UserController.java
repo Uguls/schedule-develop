@@ -1,5 +1,6 @@
 package com.sparta.schedule_develop.controller;
 
+import com.sparta.schedule_develop.common.SessionConst;
 import com.sparta.schedule_develop.dto.LoginRequestDto;
 import com.sparta.schedule_develop.dto.user.UserCreateRequestDto;
 import com.sparta.schedule_develop.dto.user.UserResponseDto;
@@ -72,7 +73,7 @@ public class UserController {
             @Valid @RequestBody UserUpdateAndDeleteRequestDto dto,
             HttpServletRequest request
     ) {
-        User loginUser = (User) request.getSession(false).getAttribute("user");
+        User loginUser = (User) request.getSession(false).getAttribute(SessionConst.LOGIN_USER);
         UserResponseDto updated = userService.updateById(dto, loginUser);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
@@ -82,7 +83,7 @@ public class UserController {
      */
     @DeleteMapping("/")
     public ResponseEntity<String> deleteUserById(HttpServletRequest request) {
-        User loginUser = (User) request.getSession(false).getAttribute("user");
+        User loginUser = (User) request.getSession(false).getAttribute(SessionConst.LOGIN_USER);
         userService.deleteById(loginUser);
         return new ResponseEntity<>(loginUser.getName() + " 유저 삭제 성공", HttpStatus.OK);
     }

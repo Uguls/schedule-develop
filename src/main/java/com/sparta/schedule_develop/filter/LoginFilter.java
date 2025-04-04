@@ -1,5 +1,6 @@
 package com.sparta.schedule_develop.filter;
 
+import com.sparta.schedule_develop.common.SessionConst;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,7 +34,7 @@ public class LoginFilter implements Filter {
 
         if (!isWhiteList(requestURI)) {
             HttpSession session = httpRequest.getSession(false);
-            if (session == null || session.getAttribute("user") == null) {
+            if (session == null || session.getAttribute(SessionConst.LOGIN_USER) == null) {
 
                 httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 httpResponse.setContentType("application/json");

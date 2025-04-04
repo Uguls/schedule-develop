@@ -1,5 +1,6 @@
 package com.sparta.schedule_develop.service;
 
+import com.sparta.schedule_develop.common.SessionConst;
 import com.sparta.schedule_develop.dto.LoginRequestDto;
 import com.sparta.schedule_develop.dto.user.UserCreateRequestDto;
 import com.sparta.schedule_develop.dto.user.UserResponseDto;
@@ -80,7 +81,7 @@ public class UserService {
             throw new PasswordMismatchException();
         }
 
-        request.getSession(true).setAttribute("user", user);
+        request.getSession(true).setAttribute(SessionConst.LOGIN_USER, user);
 
         return new UserResponseDto(user);
     }

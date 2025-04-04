@@ -1,6 +1,7 @@
 package com.sparta.schedule_develop.controller;
 
 
+import com.sparta.schedule_develop.common.SessionConst;
 import com.sparta.schedule_develop.dto.ScheduleWithCommentResponseDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleCreateRequestDto;
 import com.sparta.schedule_develop.dto.schedule.ScheduleResponseDto;
@@ -33,7 +34,7 @@ public class ScheduleController {
     @PostMapping("/")
     public ResponseEntity<ScheduleResponseDto> saveSchedule(@Valid @RequestBody ScheduleCreateRequestDto dto, HttpServletRequest request
     ) {
-        User loginUser = (User) request.getSession(false).getAttribute("user");
+        User loginUser = (User) request.getSession(false).getAttribute(SessionConst.LOGIN_USER);
         ScheduleResponseDto save = scheduleService.save(dto, loginUser);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
@@ -75,7 +76,7 @@ public class ScheduleController {
             @Valid @RequestBody ScheduleUpdateRequestDto dto,
             HttpServletRequest request
     ) {
-        User loginUser = (User) request.getSession(false).getAttribute("user");
+        User loginUser = (User) request.getSession(false).getAttribute(SessionConst.LOGIN_USER);
         ScheduleResponseDto updated = scheduleService.updateById(id, dto, loginUser);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
@@ -86,7 +87,7 @@ public class ScheduleController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteScheduleById(@PathVariable Long id, HttpServletRequest request) {
-        User loginUser = (User) request.getSession(false).getAttribute("user");
+        User loginUser = (User) request.getSession(false).getAttribute(SessionConst.LOGIN_USER);
         scheduleService.deleteById(id, loginUser);
         return new ResponseEntity<>("일정 삭제 성공", HttpStatus.OK);
     }
