@@ -29,7 +29,7 @@ public class CommentController {
      * 내용, 작성자명, 일정 이름, 작성날짜, 수정날짜
      */
     @PostMapping("/")
-    public ResponseEntity<CommentResponseDto> saveSchedule(@Valid @RequestBody CommentCreateRequestDto dto, HttpServletRequest request) {
+    public ResponseEntity<CommentResponseDto> saveComment(@Valid @RequestBody CommentCreateRequestDto dto, HttpServletRequest request) {
         User loginUser = (User) request.getSession(false).getAttribute(SessionConst.LOGIN_USER);
         CommentResponseDto save = commentService.save(dto, loginUser);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
@@ -39,7 +39,7 @@ public class CommentController {
      * @return 전체 댓글 목록 출력
      */
     @GetMapping("/")
-    public ResponseEntity<List<CommentResponseDto>> findAllSchedule() {
+    public ResponseEntity<List<CommentResponseDto>> findAllComment() {
         List<CommentResponseDto> all = commentService.findAll();
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
@@ -49,7 +49,7 @@ public class CommentController {
      * @return 내용, 작성자명, 일정 이름, 작성날짜, 수정날짜
      */
     @GetMapping("/{id}")
-    public ResponseEntity<CommentResponseDto> findScheduleById(@PathVariable Long id) {
+    public ResponseEntity<CommentResponseDto> findCommentById(@PathVariable Long id) {
         CommentResponseDto schedule = commentService.findById(id);
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class CommentController {
      * @return 수정된 댓글 내용, 작성자명, 일정 이름, 작성날짜, 수정날짜
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<CommentResponseDto> updateScheduleById(
+    public ResponseEntity<CommentResponseDto> updateCommentById(
             @PathVariable Long id,
             @Valid @RequestBody CommentUpdateRequestDto dto,
             HttpServletRequest request
@@ -75,7 +75,7 @@ public class CommentController {
      * @return 댓글 삭제 성공 여부
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteScheduleById(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<String> deleteCommentById(@PathVariable Long id, HttpServletRequest request) {
         User loginUser = (User) request.getSession(false).getAttribute(SessionConst.LOGIN_USER);
         commentService.deleteById(id, loginUser);
         return new ResponseEntity<>("댓글 삭제 성공", HttpStatus.OK);
