@@ -41,9 +41,9 @@ public class CommentService {
         return all.stream().map(CommentResponseDto::new).toList();
     }
 
-    public CommentResponseDto findById(Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다." + id));
-        return new CommentResponseDto(comment);
+    public List<CommentResponseDto> findByScheduleId(Long scheduleId) {
+        List<Comment> comments = commentRepository.findAllByScheduleId(scheduleId);
+        return comments.stream().map(CommentResponseDto::new).toList();
     }
 
     @Transactional

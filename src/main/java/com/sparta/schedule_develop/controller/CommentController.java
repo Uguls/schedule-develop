@@ -45,13 +45,13 @@ public class CommentController {
     }
 
     /**
-     * @param id 댓글이 작성된 일정 id
+     * @param scheduleId 댓글이 작성된 스케줄의 id
      * @return 내용, 작성자명, 일정 이름, 작성날짜, 수정날짜
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<CommentResponseDto> findCommentById(@PathVariable Long id) {
-        CommentResponseDto schedule = commentService.findById(id);
-        return new ResponseEntity<>(schedule, HttpStatus.OK);
+    @GetMapping("/schedules/{scheduleId}/comments")
+    public ResponseEntity<List<CommentResponseDto>> findCommentsByScheduleId(@PathVariable Long scheduleId) {
+        List<CommentResponseDto> comments = commentService.findByScheduleId(scheduleId);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     /**
