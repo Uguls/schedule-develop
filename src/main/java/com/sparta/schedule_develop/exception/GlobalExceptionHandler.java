@@ -1,5 +1,6 @@
 package com.sparta.schedule_develop.exception;
 
+import com.sparta.schedule_develop.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,19 +13,20 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(PasswordMismatchException.class)
-    public ResponseEntity<String> handlePasswordMismatch(PasswordMismatchException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponseDto> handlePasswordMismatch(PasswordMismatchException e) {
+        return new ResponseEntity<>(new ErrorResponseDto("401" ,e.getMessage(), "BAD_REQUEST"), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(LoginException.class)
-    public ResponseEntity<String> handleLoginException(LoginException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ErrorResponseDto> handleLoginException(LoginException e) {
+        return new ResponseEntity<>(new ErrorResponseDto("401" ,e.getMessage(), "BAD_REQUEST"), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleEtc(Exception e) {
-        return new ResponseEntity<>("서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(IdMismatchException.class)
+    public ResponseEntity<ErrorResponseDto> handleIdMismatchException(IdMismatchException e) {
+        return new ResponseEntity<>(new ErrorResponseDto("401" ,e.getMessage(), "BAD_REQUEST"), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

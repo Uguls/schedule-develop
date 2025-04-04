@@ -67,19 +67,17 @@ public class UserController {
      * @param dto 수정할 유저의 이름, 이메일, 비밀번호
      * @return 이름, 이메일, 작성자 id, 생성날짜, 수정날짜
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/")
     public ResponseEntity<UserResponseDto> updateUserById(
-            @PathVariable Long id,
             @Valid @RequestBody UserUpdateAndDeleteRequestDto dto,
             HttpServletRequest request
     ) {
         User loginUser = (User) request.getSession(false).getAttribute("user");
-        UserResponseDto updated = userService.updateById(id, dto, loginUser);
+        UserResponseDto updated = userService.updateById(dto, loginUser);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     /**
-     * @param dto 삭제할 유저의 id
      * @return 유저 삭제 성공 여부
      */
     @DeleteMapping("/")

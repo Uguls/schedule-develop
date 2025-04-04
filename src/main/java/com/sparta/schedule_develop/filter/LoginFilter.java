@@ -35,7 +35,6 @@ public class LoginFilter implements Filter {
             HttpSession session = httpRequest.getSession(false);
             if (session == null || session.getAttribute("user") == null) {
 
-                // 직접 JSON 응답 작성
                 httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 httpResponse.setContentType("application/json");
                 httpResponse.setCharacterEncoding("UTF-8");
